@@ -3,15 +3,19 @@ let sorted_values = [];
 let size;
 let sort = false;
 let i = 0;
+let c_size = 0;
+let adjusted_width = window.innerWidth*0.95;
+let adjusted_height = window.innerHeight*0.95;
 
 function setup() {
-    createCanvas(windowWidth, windowHeight);
-    sizeSlider = createSlider(0, 1000, 500);
+    createCanvas(adjusted_width, adjusted_height);
+    setup_ui();
+}
+
+function setup_ui(){
+    sizeSlider = createSlider(0, 1000, 200);
     sizeSlider.position(20, 20);
-
-
     button = createButton('Start');
-
     button.position(10, 50);
     button.mousePressed(init_array);
 }
@@ -22,6 +26,7 @@ function init_array() {
     for (let i = 0; i < values.length; i++) {
         values[i] = random(height);
     }
+    c_size =  adjusted_width/sizeSlider.value();
     sorted_values = values.slice();
     sorted_values.sort((a, b) => a - b);
     sort = true;
@@ -30,12 +35,11 @@ function init_array() {
 
 function draw() {
     size = sizeSlider.value();
-    const c_size =  width/sizeSlider.value();
     background(50);
     textSize(20);
-    text(size,170, 30);
     stroke(0);
     fill(255, 255, 255);
+    text(size,170, 30);
 
     if (i < values.length) {
         for (let j = 0; j < values.length - i - 1; j++) {
@@ -48,19 +52,18 @@ function draw() {
         }
     } else {
         //sort = false;
-         noLoop();
+         // noLoop();
     }
     i++;
     if (sort) {
         for (let i = 0; i < values.length; i++) {
+            rect(adjusted_width-i*c_size , height, c_size,  values[i]-adjusted_height);
             stroke(255, 255, 255);
             if (values[i] === sorted_values[i]) {
                 fill(255, 0, 0);
             } else {
                 fill(0, 0, 0);
             }
-            // line(i*2, height, i*2, height - values[i]);
-            rect(width-i*c_size , height, c_size,  values[i]-height);
         }
     }
 }
