@@ -7,6 +7,8 @@ let adjusted_width = window.innerWidth * 0.95;
 let adjusted_height = window.innerHeight * 0.95;
 let comparisons = 0;
 let array_acccesses = 0;
+let swaps = 0;
+let selection_passes =0;
 function setup() {
     createCanvas(adjusted_width, adjusted_height);
     setup_ui();
@@ -17,9 +19,17 @@ function setup_ui() {
     sizeSlider.position(20, 20);
     sizeSlider.style('width', '260px');
 
-    button = createButton('Start');
+    button = createButton('Sort');
     button.position(sizeSlider.x, 50);
     button.mousePressed(init_array);
+
+    sel = createSelect();
+    sel.position(20, button.y + button.width);
+    sel.option('Bubble Sort');
+    sel.option('Quick Sort');
+    sel.option('Selection Sort');
+    sel.changed(init_array);
+
 }
 
 function init_array() {
@@ -30,7 +40,8 @@ function init_array() {
     }
     c_size = adjusted_width / sizeSlider.value();
     comparisons = 0;
-    array_acccesses =0;
+    array_acccesses = 0;
+    selection_passes =0;
     sorted_values = values.slice();
     sorted_values.sort((a, b) => a - b);
 }
@@ -41,9 +52,9 @@ function draw() {
     textSize(20);
     stroke(0);
     fill(255, 255, 255);
-    text("Number of Values: " + size, sizeSlider.x + button.width + 10, button.y+button.height/2);
-    text("Comparisons: " + comparisons, sizeSlider.x * 4 + sizeSlider.width, 30);
-    text("Array Accesses: " + array_acccesses, sizeSlider.x * 4 + sizeSlider.width, button.y+button.height/2);
+    text("Number of Values: " + size, sizeSlider.x + button.width + 10, button.y + button.height / 2);
+    text("Comparisons: \t" + comparisons, sizeSlider.x * 4 + sizeSlider.width, 30);
+    text("Array Accesses: \t" + array_acccesses, sizeSlider.x * 4 + sizeSlider.width, button.y + button.height / 2);
 
     if (adjusted_width / c_size > 450) {
         strokeWeight(0);
@@ -51,15 +62,18 @@ function draw() {
         strokeWeight(1);
     }
     if (i < values.length) {
-        for (let j = 0; j < values.length - i - 1; j++) {
-            let a = values[j];
-            array_acccesses++;
-            let b = values[j + 1];
-            array_acccesses++;
-            if (a > b) {
-                swap(values, j, j + 1);
-            }
-            comparisons++;
+        switch (sel.value()) {
+            case 'Bubble Sort':
+                bubbleSort();
+                break;
+            case 'Selection Sort':
+                selectionSort();
+                break;
+            case 'Quick Sort':
+                break;
+            default:
+                bubbleSort();
+                break;
         }
     } else {
         //sort = false;
@@ -77,6 +91,39 @@ function draw() {
     }
 
 }
+
+function bubbleSort() {
+    for (let j = 0; j < values.length - i - 1; j++) {
+        let a = values[j];
+        array_acccesses++;
+        let b = values[j + 1];
+        array_acccesses++;
+        if (a > b) {
+            swap(values, j, j + 1);
+        }
+        comparisons++;
+    }
+}
+
+function selectionSort() {
+    let n = values.length;
+
+    // for (let i = 0; i < n - 1; i++) {
+        let min_id = selection_passes;
+        for (let j = selection_passes+1; j < n; j++) {
+            if (values[j] < values[min_id]) {
+                array_acccesses++;
+                min_id = j;
+            }
+        }
+        comparisons++;
+        array_acccesses++;
+        array_acccesses++;
+        swap(values, min_id, selection_passes);
+        selection_passes++;
+    // }
+}
+
 
 function swap(arr, a, b) {
     let temp = arr[a];
