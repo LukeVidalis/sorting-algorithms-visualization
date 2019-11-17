@@ -28,6 +28,7 @@ function setup_ui() {
     sel = createSelect();
     sel.position(20, button.y + button.width);
     sel.option('Bubble Sort');
+    sel.option('Insertion Sort');
     sel.option('Quick Sort');
     sel.option('Selection Sort');
     sel.changed(init_array);
@@ -70,6 +71,9 @@ function draw() {
             case 'Selection Sort':
                 selectionSort();
                 break;
+            case 'Insertion Sort':
+                insertionSort();
+                break;
             case 'Quick Sort':
                 quickSort(values,0,values.length-1);
                 break;
@@ -105,6 +109,19 @@ function bubbleSort() {
         }
         comparisons++;
     }
+}
+function insertionSort() {
+    let key = values[i];
+    let j = i - 1;
+
+    while (j >= 0 && values[j] > key) {
+        comparisons++;
+        values[j + 1] = values[j];
+        array_acccesses++;
+        j = j - 1;
+    }
+    values[j + 1] = key;
+    array_acccesses++;
 }
 
 function selectionSort() {
