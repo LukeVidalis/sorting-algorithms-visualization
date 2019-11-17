@@ -8,7 +8,9 @@ let adjusted_height = window.innerHeight * 0.95;
 let comparisons = 0;
 let array_acccesses = 0;
 let swaps = 0;
-let selection_passes =0;
+let low = 0;
+let high = 0;
+
 function setup() {
     createCanvas(adjusted_width, adjusted_height);
     setup_ui();
@@ -41,7 +43,6 @@ function init_array() {
     c_size = adjusted_width / sizeSlider.value();
     comparisons = 0;
     array_acccesses = 0;
-    selection_passes =0;
     sorted_values = values.slice();
     sorted_values.sort((a, b) => a - b);
 }
@@ -70,6 +71,7 @@ function draw() {
                 selectionSort();
                 break;
             case 'Quick Sort':
+                quickSort(values,0,values.length-1);
                 break;
             default:
                 bubbleSort();
@@ -106,25 +108,46 @@ function bubbleSort() {
 }
 
 function selectionSort() {
-    let n = values.length;
-
-    // for (let i = 0; i < n - 1; i++) {
-        let min_id = selection_passes;
-        for (let j = selection_passes+1; j < n; j++) {
-            if (values[j] < values[min_id]) {
-                array_acccesses++;
-                min_id = j;
-            }
+    let min_id = i;
+    for (let j = i + 1; j < values.length; j++) {
+        if (values[j] < values[min_id]) {
+            array_acccesses++;
+            min_id = j;
         }
-        comparisons++;
-        array_acccesses++;
-        array_acccesses++;
-        swap(values, min_id, selection_passes);
-        selection_passes++;
-    // }
+    }
+    comparisons++;
+    array_acccesses++;
+    array_acccesses++;
+    swap(values, min_id, i);
 }
 
+function quickSort(arr,low,high) {
+    setTimeout(() => {
 
+        if (low < high) {
+            comparisons++;
+            let pi = partition(arr, low, high);
+
+            quickSort(arr, low, pi - 1);
+            quickSort(arr, pi + 1, high);
+        }
+    },650);
+}
+
+function partition(arr, low, high) {
+    let pivot = arr[high];
+    let i = (low - 1);
+    for (let j = low; j <= high - 1; j++) {
+        if (arr[j] <= pivot) {
+            array_acccesses++;
+            comparisons++;
+            i++;
+            swap(arr, i, j);
+        }
+    }
+    swap(arr, i + 1, high);
+    return (i + 1);
+}
 function swap(arr, a, b) {
     let temp = arr[a];
     array_acccesses++;
