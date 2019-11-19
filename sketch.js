@@ -165,6 +165,7 @@ function partition(arr, low, high) {
     swap(arr, i + 1, high);
     return (i + 1);
 }
+
 function swap(arr, a, b) {
     let temp = arr[a];
     array_acccesses++;
