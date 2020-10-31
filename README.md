@@ -5,4 +5,4 @@ A project which visualizes several sorting algorithms using [p5.js](https://p5js
 3. Insertion Sort
 4. Bubble Sort
 
-
+You can view the result [here](https://lukevidalis.github.io/sorting-algorithms-visualization/).
